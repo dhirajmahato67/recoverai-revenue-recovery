@@ -1,0 +1,85 @@
+version: "3.9"
+
+services:
+  # ----------------------------------------------------------------------------
+  # PostgreSQL Database Service
+  # ----------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: recover_ai_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-recover_ai}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-recover_ai}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - recover_ai_network
+
+  # ----------------------------------------------------------------------------
+  # RecoverAI FastAPI Backend Service
+  # ----------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: recover_ai_backend
+    restart: unless-stopped
+    environment:
+      APP_NAME: "RecoverAI API"
+      APP_ENV: "development"
+      DEBUG: "true"
+      HOST: "0.0.0.0"
+      PORT: "8000"
+      DATABASE_URL: "postgresql+asyncpg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-recover_ai}"
+      CORS_ALLOWED_ORIGINS: "http://localhost:3000,http://127.0.0.1:3000,http://frontend:3000"
+      LOG_LEVEL: "INFO"
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - recover_ai_network
+
+  # ----------------------------------------------------------------------------
+  # RecoverAI Next.js Frontend Service
+  # ----------------------------------------------------------------------------
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        NEXT_PUBLIC_API_URL: "http://localhost:8000"
+        NEXT_PUBLIC_APP_ENV: "development"
+        NEXT_PUBLIC_DEMO_MODE: "true"
+        NEXT_PUBLIC_DEFAULT_MERCHANT_ID: "00000000-0000-0000-0000-000000000001"
+    container_name: recover_ai_frontend
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: "http://localhost:8000"
+      NEXT_PUBLIC_APP_ENV: "development"
+      NEXT_PUBLIC_DEMO_MODE: "true"
+      NEXT_PUBLIC_DEFAULT_MERCHANT_ID: "00000000-0000-0000-0000-000000000001"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - recover_ai_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  recover_ai_network:
+    driver: bridge
