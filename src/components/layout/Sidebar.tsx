@@ -68,7 +68,7 @@ export function Sidebar({ isOpenMobile, onCloseMobile }: SidebarProps) {
         },
         {
           name: "Investigations",
-          href: "/investigations/INV-00000000",
+          href: "/investigations",
           icon: FileSearch,
         },
       ],
@@ -162,8 +162,12 @@ export function Sidebar({ isOpenMobile, onCloseMobile }: SidebarProps) {
               <div className="space-y-0.5">
                 {section.items.map((item) => {
                   const isActive =
-                    pathname === item.href ||
-                    (item.href !== "/dashboard" && pathname.startsWith(item.href));
+                    item.href === "/recovery"
+                      ? pathname === "/recovery" || pathname === "/recovery/"
+                      : pathname === item.href ||
+                        (item.href !== "/dashboard" &&
+                          item.href !== "/recovery" &&
+                          pathname.startsWith(item.href));
                   const Icon = item.icon;
 
                   return (

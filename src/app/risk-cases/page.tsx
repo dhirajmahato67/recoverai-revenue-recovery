@@ -168,84 +168,85 @@ export default function RiskCasesPage() {
             ))}
           </div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Case ID</TableHead>
-                <TableHead>Risk Type & Details</TableHead>
-                <TableHead>Severity</TableHead>
-                <TableHead>Root Cause</TableHead>
-                <TableHead className="text-right">Revenue at Risk</TableHead>
-                <TableHead className="text-right">Recoverable</TableHead>
-                <TableHead className="text-center">Confidence</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {cases.length === 0 ? (
+          <div className="overflow-x-auto w-full">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={9} className="text-center py-12 text-muted-foreground">
-                    <div className="flex flex-col items-center justify-center space-y-2">
-                      <AlertTriangle className="w-8 h-8 opacity-30" />
-                      <p className="font-semibold text-sm">No revenue risk cases found</p>
-                      <p className="text-xs text-muted-foreground">
-                        Try adjusting your filters or search criteria.
-                      </p>
-                    </div>
-                  </TableCell>
+                  <TableHead className="w-[100px]">Case ID</TableHead>
+                  <TableHead>Risk Type & Details</TableHead>
+                  <TableHead>Severity</TableHead>
+                  <TableHead>Root Cause</TableHead>
+                  <TableHead className="text-right">Revenue at Risk</TableHead>
+                  <TableHead className="text-right">Recoverable</TableHead>
+                  <TableHead className="text-center">Confidence</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Action</TableHead>
                 </TableRow>
-              ) : (
-                cases.map((rc) => (
-                  <TableRow
-                    key={rc.id}
-                    onClick={() => router.push(`/risk-cases/${rc.id}`)}
-                    className="cursor-pointer transition-colors hover:bg-muted/50"
-                  >
-                    <TableCell className="font-mono font-bold text-foreground">
-                      {rc.id}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-foreground">{rc.title}</span>
-                        <span className="text-[11px] text-muted-foreground">
-                          {rc.riskType.replace("_", " ")}
-                        </span>
+              </TableHeader>
+              <TableBody>
+                {cases.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={9} className="text-center py-12 text-muted-foreground">
+                      <div className="flex flex-col items-center justify-center space-y-2">
+                        <AlertTriangle className="w-8 h-8 opacity-30" />
+                        <p className="font-semibold text-sm">No revenue risk cases found</p>
+                        <p className="text-xs text-muted-foreground">
+                          Try adjusting your filters or search criteria.
+                        </p>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <SeverityBadge severity={rc.severity} />
-                    </TableCell>
-                    <TableCell className="max-w-[240px] truncate text-muted-foreground text-xs" title={rc.rootCause}>
-                      {rc.rootCause}
-                    </TableCell>
-                    <TableCell className="text-right font-mono font-semibold text-rose-600 dark:text-rose-400">
-                      {formatINR(rc.revenueAtRisk)}
-                    </TableCell>
-                    <TableCell className="text-right font-mono font-semibold text-emerald-600 dark:text-emerald-400">
-                      {formatINR(rc.recoverableRevenue)}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <span className="font-mono text-xs font-semibold px-1.5 py-0.5 rounded bg-muted">
-                        {rc.confidenceScore}%
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <StatusBadge status={rc.status} />
-                    </TableCell>
-                    <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
-                      <Link href={`/risk-cases/${rc.id}`}>
-                        <Button size="sm" variant="outline" className="h-7 text-xs gap-1">
-                          Investigate
-                          <ArrowRight className="w-3 h-3" />
-                        </Button>
-                      </Link>
-                    </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  cases.map((rc) => (
+                    <TableRow
+                      key={rc.id}
+                      onClick={() => router.push(`/risk-cases/${rc.id}`)}
+                      className="cursor-pointer transition-colors hover:bg-muted/50"
+                    >
+                      <TableCell className="font-mono font-bold text-foreground">
+                        {rc.id}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col">
+                          <span className="font-semibold text-foreground">{rc.title}</span>
+                          <span className="text-[11px] text-muted-foreground">
+                            {rc.riskType.replace("_", " ")}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <SeverityBadge severity={rc.severity} />
+                      </TableCell>
+                      <TableCell className="max-w-[240px] truncate text-muted-foreground text-xs" title={rc.rootCause}>
+                        {rc.rootCause}
+                      </TableCell>
+                      <TableCell className="text-right font-mono font-semibold text-rose-600 dark:text-rose-400">
+                        {formatINR(rc.revenueAtRisk)}
+                      </TableCell>
+                      <TableCell className="text-right font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                        {formatINR(rc.recoverableRevenue)}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <span className="font-mono text-xs font-semibold px-1.5 py-0.5 rounded bg-muted">
+                          {rc.confidenceScore}%
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <StatusBadge status={rc.status} />
+                      </TableCell>
+                      <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                        <Link href={`/risk-cases/${rc.id}`}>
+                          <Button size="sm" variant="outline" className="h-7 text-xs gap-1">
+                            Investigate <ArrowRight className="w-3 h-3" />
+                          </Button>
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         )}
       </Card>
     </div>

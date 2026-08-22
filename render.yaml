@@ -1,0 +1,37 @@
+# ==============================================================================
+# RecoverAI Render Blueprint Specification
+# Infrastructure as Code (IaC) for FastAPI Backend & Managed PostgreSQL
+# ==============================================================================
+services:
+  - type: web
+    name: recoverai-backend
+    env: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    plan: standard
+    region: oregon
+    healthCheckPath: /api/v1/health/live
+    autoDeploy: false
+    envVars:
+      - key: APP_NAME
+        value: RecoverAI API
+      - key: APP_ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://recoverai-live.netlify.app,https://recover-ai.netlify.app,http://localhost:3000,http://127.0.0.1:3000
+      - key: LOG_LEVEL
+        value: INFO
+      - key: DOCS_ENABLED
+        value: "true"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: recoverai-postgres
+          property: connectionString
+
+databases:
+  - name: recoverai-postgres
+    plan: standard
+    region: oregon
+    postgresMajorVersion: "16"

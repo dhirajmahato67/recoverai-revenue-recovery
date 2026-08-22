@@ -75,11 +75,34 @@ export function RevenueTrendChart({
     return null;
   };
 
+  const getNoticeMessage = () => {
+    if (availableFrom && availableTo) {
+      return `Showing available telemetry from ${availableFrom} to ${availableTo}.`;
+    }
+    switch (timeframe) {
+      case "7d":
+        return "Only the last 24 hours of telemetry are currently available. The selected 7-day view is therefore limited to available data.";
+      case "30d":
+        return "Only the last 24 hours of telemetry are currently available. The selected 30-day view is therefore limited to available data.";
+      case "90d":
+        return "Only the last 24 hours of telemetry are currently available. The selected 90-day view is therefore limited to available data.";
+      default:
+        return "Only the last 24 hours of telemetry are currently available. Visualizing available data for the active period.";
+    }
+  };
+
   return (
     <Card className="col-span-full">
       <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 gap-2">
         <div>
-          <CardTitle>Revenue & Revenue at Risk</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <span>Revenue & Revenue at Risk</span>
+            {timeframe !== "24h" && (
+              <span className="text-xs font-normal text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                24H Telemetry Window
+              </span>
+            )}
+          </CardTitle>
           <CardDescription>
             Historical processed volume compared with detected risk leakage and recovered funds.
           </CardDescription>
@@ -102,16 +125,16 @@ export function RevenueTrendChart({
       </CardHeader>
 
       <CardContent className="space-y-3">
-        {!hasSufficientHistory && (
-          <div className="flex items-center gap-2 p-2.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-xs text-amber-800 dark:text-amber-300">
-            <Info className="w-4 h-4 shrink-0 text-amber-500" />
+        {(timeframe !== "24h" || !hasSufficientHistory) && (
+          <div className="flex items-start sm:items-center gap-2 p-2.5 rounded-md bg-amber-500/10 border border-amber-500/20 text-xs text-amber-800 dark:text-amber-300">
+            <Info className="w-4 h-4 shrink-0 text-amber-500 mt-0.5 sm:mt-0" />
             <span>
-              <strong>Limited historical data:</strong> Available transaction telemetry spans 3.25h (21 Aug 2026 05:30 – 08:46 UTC). Visualizing available data for the active period.
+              <strong className="font-semibold">Limited historical data:</strong> {getNoticeMessage()}
             </span>
           </div>
         )}
 
-        <div className="relative h-72 w-full">
+        <div className="relative h-64 sm:h-72 w-full">
           {isLoading && (
             <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-xs rounded-md">
               <Loader2 className="w-6 h-6 animate-spin text-primary" />

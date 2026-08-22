@@ -115,7 +115,7 @@ export function RiskCaseDetailClient({ caseId }: { caseId?: string }) {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <Link href={`/investigations/${riskCase.investigationId || "INV-001"}`}>
+            <Link href={`/investigations/${riskCase.investigationId || "INV-00000000"}`}>
               <Button variant="ai" size="sm" className="h-8 gap-1.5 text-xs font-semibold">
                 <Sparkles className="w-3.5 h-3.5" />
                 View AI Investigation

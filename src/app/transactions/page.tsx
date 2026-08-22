@@ -197,72 +197,74 @@ export default function TransactionsPage() {
           </div>
         ) : (
           <>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[120px]">Transaction ID</TableHead>
-                  <TableHead>Order ID</TableHead>
-                  <TableHead>Customer</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
-                  <TableHead>Method</TableHead>
-                  <TableHead>Bank</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Failure Reason</TableHead>
-                  <TableHead className="text-right">Created</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {transactions.length === 0 ? (
+            <div className="overflow-x-auto w-full">
+              <Table>
+                <TableHeader>
                   <TableRow>
-                    <TableCell colSpan={9} className="text-center py-12 text-muted-foreground">
-                      No matching transactions found.
-                    </TableCell>
+                    <TableHead className="w-[120px]">Transaction ID</TableHead>
+                    <TableHead>Order ID</TableHead>
+                    <TableHead>Customer</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
+                    <TableHead>Method</TableHead>
+                    <TableHead>Bank</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Failure Reason</TableHead>
+                    <TableHead className="text-right">Created</TableHead>
                   </TableRow>
-                ) : (
-                  transactions.map((tx) => (
-                    <TableRow
-                      key={tx.id}
-                      onClick={() => handleRowClick(tx)}
-                      className="cursor-pointer transition-colors hover:bg-muted/50"
-                    >
-                      <TableCell className="font-mono font-bold text-foreground">
-                        {tx.id}
-                      </TableCell>
-                      <TableCell className="font-mono text-muted-foreground text-xs">
-                        {tx.orderId}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col">
-                          <span className="font-semibold text-foreground text-xs">{tx.customerName}</span>
-                          <span className="text-[10px] text-muted-foreground truncate max-w-[140px]">
-                            {tx.customerEmail}
-                          </span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right font-mono font-bold text-foreground">
-                        {formatINR(tx.amount)}
-                      </TableCell>
-                      <TableCell className="text-xs text-muted-foreground">
-                        <span className="font-medium text-foreground">{tx.method}</span>
-                        {tx.upiApp && <span className="text-[10px] block opacity-75">{tx.upiApp}</span>}
-                      </TableCell>
-                      <TableCell className="font-medium text-foreground text-xs">
-                        {tx.bank}
-                      </TableCell>
-                      <TableCell>
-                        <StatusBadge status={tx.status} />
-                      </TableCell>
-                      <TableCell className="text-xs text-rose-600 dark:text-rose-400 max-w-[160px] truncate">
-                        {tx.failureReason || "—"}
-                      </TableCell>
-                      <TableCell className="text-right font-mono text-[11px] text-muted-foreground">
-                        {formatDateTime(tx.createdAt)}
+                </TableHeader>
+                <TableBody>
+                  {transactions.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={9} className="text-center py-12 text-muted-foreground">
+                        No matching transactions found.
                       </TableCell>
                     </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
+                  ) : (
+                    transactions.map((tx) => (
+                      <TableRow
+                        key={tx.id}
+                        onClick={() => handleRowClick(tx)}
+                        className="cursor-pointer transition-colors hover:bg-muted/50"
+                      >
+                        <TableCell className="font-mono font-bold text-foreground">
+                          {tx.id}
+                        </TableCell>
+                        <TableCell className="font-mono text-muted-foreground text-xs">
+                          {tx.orderId}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-col">
+                            <span className="font-semibold text-foreground text-xs">{tx.customerName}</span>
+                            <span className="text-[10px] text-muted-foreground truncate max-w-[140px]">
+                              {tx.customerEmail}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right font-mono font-bold text-foreground">
+                          {formatINR(tx.amount)}
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground">
+                          <span className="font-medium text-foreground">{tx.method}</span>
+                          {tx.upiApp && <span className="text-[10px] block opacity-75">{tx.upiApp}</span>}
+                        </TableCell>
+                        <TableCell className="font-medium text-foreground text-xs">
+                          {tx.bank}
+                        </TableCell>
+                        <TableCell>
+                          <StatusBadge status={tx.status} />
+                        </TableCell>
+                        <TableCell className="text-xs text-rose-600 dark:text-rose-400 max-w-[160px] truncate">
+                          {tx.failureReason || "—"}
+                        </TableCell>
+                        <TableCell className="text-right font-mono text-[11px] text-muted-foreground">
+                          {formatDateTime(tx.createdAt)}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </div>
 
             {/* Pagination Controls */}
             <div className="flex items-center justify-between p-3 border-t border-border/60 bg-muted/20 text-xs">

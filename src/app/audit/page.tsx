@@ -152,63 +152,65 @@ export default function AuditTrailPage() {
             ))}
           </div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Time</TableHead>
-                <TableHead>Actor</TableHead>
-                <TableHead>Action</TableHead>
-                <TableHead>Target Entity</TableHead>
-                <TableHead>Summary / Details</TableHead>
-                <TableHead>Result</TableHead>
-                <TableHead className="text-right">Proof</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {events.length === 0 ? (
+          <div className="overflow-x-auto w-full">
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-12 text-muted-foreground">
-                    No matching audit records found.
-                  </TableCell>
+                  <TableHead className="w-[100px]">Time</TableHead>
+                  <TableHead>Actor</TableHead>
+                  <TableHead>Action</TableHead>
+                  <TableHead>Target Entity</TableHead>
+                  <TableHead>Summary / Details</TableHead>
+                  <TableHead>Result</TableHead>
+                  <TableHead className="text-right">Proof</TableHead>
                 </TableRow>
-              ) : (
-                events.map((ev) => (
-                  <TableRow
-                    key={ev.id}
-                    onClick={() => handleRowClick(ev)}
-                    className="cursor-pointer transition-colors hover:bg-muted/50"
-                  >
-                    <TableCell className="font-mono text-xs text-foreground font-semibold">
-                      {ev.timeDisplay}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1.5 font-medium text-foreground text-xs">
-                        {getActorIcon(ev.actorType)}
-                        <span>{ev.actorName}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-semibold text-foreground text-xs">
-                      {ev.action}
-                    </TableCell>
-                    <TableCell>
-                      <span className="font-mono text-xs text-muted-foreground">
-                        {ev.targetDisplay}
-                      </span>
-                    </TableCell>
-                    <TableCell className="max-w-[280px] truncate text-xs text-muted-foreground" title={ev.summary}>
-                      {ev.summary}
-                    </TableCell>
-                    <TableCell>
-                      <StatusBadge status={ev.result} />
-                    </TableCell>
-                    <TableCell className="text-right font-mono text-[10px] text-muted-foreground opacity-60">
-                      {ev.cryptographicHash.slice(0, 10)}...
+              </TableHeader>
+              <TableBody>
+                {events.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-12 text-muted-foreground">
+                      No matching audit records found.
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ) : (
+                  events.map((ev) => (
+                    <TableRow
+                      key={ev.id}
+                      onClick={() => handleRowClick(ev)}
+                      className="cursor-pointer transition-colors hover:bg-muted/50"
+                    >
+                      <TableCell className="font-mono text-xs text-foreground font-semibold">
+                        {ev.timeDisplay}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1.5 font-medium text-foreground text-xs">
+                          {getActorIcon(ev.actorType)}
+                          <span>{ev.actorName}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="font-semibold text-foreground text-xs">
+                        {ev.action}
+                      </TableCell>
+                      <TableCell>
+                        <span className="font-mono text-xs text-muted-foreground">
+                          {ev.targetDisplay}
+                        </span>
+                      </TableCell>
+                      <TableCell className="max-w-[280px] truncate text-xs text-muted-foreground" title={ev.summary}>
+                        {ev.summary}
+                      </TableCell>
+                      <TableCell>
+                        <StatusBadge status={ev.result} />
+                      </TableCell>
+                      <TableCell className="text-right font-mono text-[10px] text-muted-foreground opacity-60">
+                        {ev.cryptographicHash.slice(0, 10)}...
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
         )}
       </Card>
 

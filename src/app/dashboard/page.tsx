@@ -46,12 +46,14 @@ export default function DashboardPage() {
   const isSimulationScenario =
     currentScenario !== "PAYMENT_DEGRADATION" && currentScenario !== "UPI_DEGRADATION";
 
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
   const loadData = React.useCallback(
-    async (targetTimeframe: DashboardTimeframe, isTimeframeSwitch = false) => {
-      if (isTimeframeSwitch) {
-        setChartLoading(true);
-      } else {
+    async (targetTimeframe: DashboardTimeframe, isInitial = false) => {
+      if (isInitial) {
         setLoading(true);
+      } else {
+        setChartLoading(true);
       }
       setError(null);
       try {
@@ -60,7 +62,22 @@ export default function DashboardPage() {
           getRiskCases(),
           getInvestigationById("INV-00000000").catch(() => null),
         ]);
-        setMetrics(m);
+        const activeCasesCount = cases.filter(
+          (c) => c.status !== "RESOLVED" && c.status !== "DISMISSED"
+        ).length;
+        const highPriorityCount = cases.filter(
+          (c) =>
+            c.status !== "RESOLVED" &&
+            c.status !== "DISMISSED" &&
+            (c.severity === "HIGH" || c.severity === "CRITICAL")
+        ).length;
+
+        const synchronizedMetrics = {
+          ...m,
+          activeRiskCasesCount: activeCasesCount > 0 ? activeCasesCount : m.activeRiskCasesCount,
+          highPriorityCasesCount: highPriorityCount > 0 ? highPriorityCount : m.highPriorityCasesCount,
+        };
+        setMetrics(synchronizedMetrics);
         setRiskCases(cases);
         if (inv && typeof inv.confidenceScore === "number") {
           setAiConfidence(inv.confidenceScore);
@@ -77,12 +94,16 @@ export default function DashboardPage() {
   );
 
   useEffect(() => {
-    loadData(timeframe, false);
+    loadData(timeframe, isInitialLoad);
+    if (isInitialLoad) {
+      setIsInitialLoad(false);
+    }
   }, [loadData, timeframe]);
 
   const handleTimeframeChange = (newTimeframe: DashboardTimeframe) => {
-    setTimeframe(newTimeframe);
-    loadData(newTimeframe, true);
+    if (newTimeframe !== timeframe) {
+      setTimeframe(newTimeframe);
+    }
   };
 
   const handleRefresh = async () => {

@@ -269,7 +269,7 @@ async def get_risk_metrics(
         func.coalesce(func.sum(RiskCase.estimated_recoverable_revenue), 0.0).label("total_recoverable"),
     ).where(
         RiskCase.merchant_id == merchant_id,
-        RiskCase.status.in_(["OPEN", "INVESTIGATING", "RECOMMENDED"]),
+        RiskCase.status.in_(["OPEN", "INVESTIGATING", "RECOMMENDED", "PENDING_APPROVAL", "RECOVERY_PLANNED", "RECOVERING"]),
     )
     res = (await db.execute(stmt)).one()
 

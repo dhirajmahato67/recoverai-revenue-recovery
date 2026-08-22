@@ -81,12 +81,12 @@ export function CommandMenu() {
                   <ArrowRight className="w-3 h-3 opacity-40" />
                 </Command.Item>
                 <Command.Item
-                  onSelect={() => runCommand(() => router.push("/investigations/INV-001"))}
+                  onSelect={() => runCommand(() => router.push("/investigations/INV-00000000"))}
                   className="flex items-center justify-between cursor-pointer hover:bg-muted/80"
                 >
                   <div className="flex items-center gap-2">
                     <FileSearch className="w-3.5 h-3.5 text-violet-500" />
-                    <span>INV-001: AI Root Cause Analysis (HDFC Gateway Latency)</span>
+                    <span>INV-00000000: AI Root Cause Analysis (HDFC Gateway Latency)</span>
                   </div>
                   <ArrowRight className="w-3 h-3 opacity-40" />
                 </Command.Item>

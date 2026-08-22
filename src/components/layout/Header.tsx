@@ -89,12 +89,12 @@ export function Header({ onToggleSidebar }: HeaderProps) {
         <ScenarioSelector />
 
         {/* Test Mode Indicator */}
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-amber-500/30 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 text-xs font-semibold select-none shadow-xs">
+        <div className="flex items-center gap-1.5 px-2 py-1 sm:px-2.5 rounded-full border border-amber-500/30 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 text-xs font-semibold select-none shadow-xs">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
           </span>
-          <span>Test Mode</span>
+          <span className="hidden sm:inline">Test Mode</span>
         </div>
 
         {/* Merchant Selector */}
@@ -103,10 +103,10 @@ export function Header({ onToggleSidebar }: HeaderProps) {
             <Button
               variant="outline"
               size="sm"
-              className="h-8 gap-1.5 px-2.5 text-xs font-medium text-foreground bg-background hover:bg-muted"
+              className="h-8 gap-1.5 px-2 sm:px-2.5 text-xs font-medium text-foreground bg-background hover:bg-muted"
             >
               <Building2 className="w-3.5 h-3.5 text-muted-foreground" />
-              <span className="font-semibold">Acme Commerce</span>
+              <span className="font-semibold hidden sm:inline">Acme Commerce</span>
               <ChevronDown className="w-3 h-3 opacity-60" />
             </Button>
           </DropdownMenuTrigger>
