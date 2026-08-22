@@ -93,3 +93,34 @@ Instead of stopping at:
 
 ```text
 Payment Failed
+
+
+# 2. Project Vision
+
+The vision of RecoverAI is to create a **revenue recovery control center** where payment operations teams can move from reactive monitoring to proactive financial recovery.
+
+The central product philosophy is:
+
+> **Automation should increase recovery without increasing financial risk.**
+
+The platform therefore does not assume that every failed payment should be retried.
+
+Instead, RecoverAI follows:
+
+```text
+Detect
+   ↓
+Investigate
+   ↓
+Quantify
+   ↓
+Decide
+   ↓
+Authorize
+   ↓
+Recover
+   ↓
+Reconcile
+   ↓
+Audit
+```
