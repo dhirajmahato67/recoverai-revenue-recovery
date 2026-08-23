@@ -2107,11 +2107,8 @@ to:
 
 # 57. Project Links
 
-- **Live Application:** `<ADD_LIVE_APPLICATION_URL>`
-- **GitHub Repository:** `<ADD_GITHUB_REPOSITORY_URL>`
-- **Project Documentation:** `README.md`
-- **Demo Video:** `<ADD_DEMO_VIDEO_URL>`
-- **Presentation:** `<ADD_PRESENTATION_URL>`
+- **Live Application:** recoverai.dhirajm.com.np
+- **Demo Video:** 
 
 ---
 
