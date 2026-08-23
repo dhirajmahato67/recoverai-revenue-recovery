@@ -2107,7 +2107,7 @@ to:
 
 # 57. Project Links
 
-- **Live Application:** recoverai.dhirajm.com.np
+- **Live Application:** [RecoverAI](https://recoverai.dhirajm.com.np)
 - **Demo Video:** 
 
 ---
