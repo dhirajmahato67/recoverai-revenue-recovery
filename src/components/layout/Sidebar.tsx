@@ -245,7 +245,7 @@ export function Sidebar({ isOpenMobile, onCloseMobile }: SidebarProps) {
             {!collapsed && <span>Settings</span>}
           </Link>
           <a
-            href="https://github.com"
+            href="https://github.com/dhirajmahato67/recoverai-revenue-recovery/tree/main/docs"
             target="_blank"
             rel="noreferrer"
             className={cn(
