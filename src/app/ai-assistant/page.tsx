@@ -44,6 +44,88 @@ const suggestedPrompts = [
   "Did we recover any money?",
 ];
 
+function renderInlineMarkdown(text: string): React.ReactNode[] {
+  const parts: React.ReactNode[] = [];
+  const regex = /(\*\*.*?\*\*|`.*?`)/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.substring(lastIndex, match.index));
+    }
+    const token = match[0];
+    if (token.startsWith("**") && token.endsWith("**")) {
+      parts.push(
+        <strong key={match.index} className="font-semibold text-foreground">
+          {token.slice(2, -2)}
+        </strong>
+      );
+    } else if (token.startsWith("`") && token.endsWith("`")) {
+      parts.push(
+        <code key={match.index} className="font-mono bg-muted/80 px-1 py-0.5 rounded text-[11px] text-foreground">
+          {token.slice(1, -1)}
+        </code>
+      );
+    }
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.substring(lastIndex));
+  }
+
+  return parts;
+}
+
+function FormattedMarkdown({ content }: { content: string }) {
+  if (!content) return null;
+
+  const normalized = content.replace(/\r\n/g, "\n");
+  const blocks = normalized.split(/\n\n+/);
+
+  return (
+    <div className="space-y-2 text-xs leading-relaxed">
+      {blocks.map((block, bIdx) => {
+        const lines = block.split("\n").filter((l) => l.trim().length > 0);
+        if (lines.length === 0) return null;
+
+        const isList = lines.every((line) => {
+          const t = line.trim();
+          return t.startsWith("•") || t.startsWith("-") || /^\d+\./.test(t);
+        });
+
+        if (isList) {
+          return (
+            <ul key={bIdx} className="space-y-1.5 pl-1 my-1.5">
+              {lines.map((line, lIdx) => {
+                const cleanLine = line.trim().replace(/^[•\-]\s*/, "").replace(/^\d+\.\s*/, "");
+                return (
+                  <li key={lIdx} className="flex items-start gap-2">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-violet-500 shrink-0 mt-1.5" />
+                    <span className="flex-1">{renderInlineMarkdown(cleanLine)}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          );
+        }
+
+        return (
+          <p key={bIdx} className="leading-relaxed">
+            {lines.map((line, lIdx) => (
+              <React.Fragment key={lIdx}>
+                {lIdx > 0 && <br />}
+                {renderInlineMarkdown(line)}
+              </React.Fragment>
+            ))}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
 function AIAssistantContent() {
   const searchParams = useSearchParams();
   const initialInvId = searchParams.get("inv") || "INV-00000000";
@@ -225,7 +307,7 @@ function AIAssistantContent() {
                         : "bg-muted/40 border border-border/70 text-foreground"
                     )}
                   >
-                    <p className="whitespace-pre-line">{msg.content}</p>
+                    <FormattedMarkdown content={msg.content} />
 
                     {/* Grounding & Evidence Chips */}
                     {msg.evidenceRefs && msg.evidenceRefs.length > 0 && (
